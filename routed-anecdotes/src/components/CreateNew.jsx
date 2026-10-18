@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useField } from "../src/index";
+import InputField from "./InputField.jsx";
 
 const CreateNew = ({ addAnecdote }) => {
   const navigate = useNavigate();
@@ -31,21 +32,15 @@ const CreateNew = ({ addAnecdote }) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            {...content}
-          />
+          <InputField {...content} />
         </div>
         <div>
           author
-          <input
-            {...author}
-          />
+          <InputField {...author} />
         </div>
         <div>
           url for more info
-          <input
-            {...info}
-          />
+          <InputField {...info} />
         </div>
         <button>create</button>
         <button onClick={handleReset}>reset</button>
