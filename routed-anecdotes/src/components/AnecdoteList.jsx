@@ -1,4 +1,4 @@
-import { useAnecdotes } from "../index";
+import { useAnecdotes } from "../hooks/index";
 
 const AnecdoteList = () => {
   const { anecdotes, deleteAnecdote } = useAnecdotes();

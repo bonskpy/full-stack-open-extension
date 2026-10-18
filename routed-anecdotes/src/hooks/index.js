@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import anecdoteService from "./services/anecdotes.js";
+import anecdoteService from "../services/anecdotes.js";
 
 export const useField = (name) => {
   const [value, setValue] = useState("");
