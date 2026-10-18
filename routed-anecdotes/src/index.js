@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import anecdoteService from "../services/anecdotes.js";
+import anecdoteService from "./services/anecdotes.js";
 
 export const useField = (name) => {
   const [value, setValue] = useState("");
@@ -26,7 +26,6 @@ export const useAnecdotes = () => {
   useEffect(() => {
     const fetchAnecdotes = async () => {
       try {
-        console.log("fetching anecdotes...");
         const data = await anecdoteService.getAll();
         setAnecdotes(data);
       } catch (err) {
@@ -36,8 +35,29 @@ export const useAnecdotes = () => {
     fetchAnecdotes();
   }, []);
 
+  const addAnecdote = async (anecdote) => {
+    try {
+      const newAnecdote = await anecdoteService.createNew(anecdote);
+      setAnecdotes((anecdotes) => anecdotes.concat(newAnecdote));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const deleteAnecdote = async (id) => {
+    try {
+      await anecdoteService.deleteOne(id);
+      setAnecdotes((currentAnecdotes) =>
+        currentAnecdotes.filter((anecdote) => anecdote.id !== id)
+      );
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return {
     anecdotes,
-    setAnecdotes,
+    addAnecdote,
+    deleteAnecdote,
   };
 };

@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router";
-import { useField } from "../src/index";
+import { useAnecdotes, useField } from "../index";
 import InputField from "./InputField.jsx";
 
-const CreateNew = ({ addAnecdote }) => {
+const CreateNew = () => {
   const navigate = useNavigate();
   const content = useField("content");
   const author = useField("author");
   const info = useField("info");
+  const { addAnecdote } = useAnecdotes();
 
   const handleSubmit = (e) => {
     e.preventDefault();
