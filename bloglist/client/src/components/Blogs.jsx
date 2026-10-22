@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 const Blogs = ({ blogs }) => {
   return (
@@ -18,7 +26,9 @@ const Blogs = ({ blogs }) => {
           <TableBody>
             {blogs.map((blog) => (
               <TableRow key={blog.id}>
-                <TableCell><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></TableCell>
+                <TableCell>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </TableCell>
                 <TableCell>{blog.author}</TableCell>
                 <TableCell>{blog.likes}</TableCell>
                 <TableCell>{blog.user.username}</TableCell>

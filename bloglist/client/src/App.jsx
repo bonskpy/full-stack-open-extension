@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Routes, Route, useNavigate, useMatch } from "react-router-dom";
+import { Route, Routes, useMatch, useNavigate } from "react-router-dom";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -12,6 +12,7 @@ import Notification from "./components/Notification";
 import Blog from "./components/Blog";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import { Container } from "@mui/material";
 
@@ -30,9 +31,7 @@ const App = () => {
   const navigate = useNavigate();
   const match = useMatch("/blogs/:id");
 
-  const blog = match
-    ? blogs.find( (blog) => blog.id === match.params.id)
-    : null;
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
 
   useEffect(() => {
     blogService
@@ -40,9 +39,9 @@ const App = () => {
       .then((blogs) =>
         setBlogs(
           blogs.sort((a, b) =>
-            a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0,
+            a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
           ),
-        ),
+        )
       );
   }, []);
 
@@ -94,7 +93,7 @@ const App = () => {
       setBlogs((blogs) =>
         blogs
           .filter((b) => b.id !== blog.id)
-          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0)),
+          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
       );
       setNotification({ content: "blog removed", type: "info" });
       navigate("/");
@@ -113,63 +112,69 @@ const App = () => {
   };
 
   const handleLikes = async (blog) => {
-    try{
+    try {
       const updatedBlog = await blogService.updateOne(blog);
 
       setBlogs((blogs) =>
         blogs
           .map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0)),
+          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
       );
-    }
-    catch (error){
+    } catch (error) {
       errorHandler(error);
       handleLogout();
       setNotification({ content: "please login", type: "info" });
-    }
-    finally {
+    } finally {
       setTimeout(() => setNotification(null), 3000);
     }
-
   };
 
   return (
     <Container>
-      <Header user={user} handleLogout={handleLogout}/>
+      <Header user={user} handleLogout={handleLogout} />
       <Notification message={notification} />
 
-      <Routes>
-        <Route path='/login' element={
-          <LoginForm onLogin={handleLogin} />
-        } />
+      <ErrorBoundary fallback={<h2>Something went wrong!</h2>}>
+        <Routes>
+          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
 
-        <Route path='/' element={
-          <Blogs
-            blogs={blogs}
-            likesHandler={handleLikes}
-            removeHandler={handleRemove} />
-        } />
+          <Route
+            path="/"
+            element={
+              <Blogs
+                blogs={blogs}
+                likesHandler={handleLikes}
+                removeHandler={handleRemove}
+              />
+            }
+          />
 
-        <Route path='/blogs/:id' element={
-          <Blog
-            blog={blog}
-            user={user}
-            likesHandler={handleLikes}
-            removeHandler={handleRemove} />
-        } />
+          <Route
+            path="/blogs/:id"
+            element={
+              <Blog
+                blog={blog}
+                user={user}
+                likesHandler={handleLikes}
+                removeHandler={handleRemove}
+              />
+            }
+          />
 
-        <Route path='/create' element={
-          <CreateBlogForm onCreate={handleCreate} />
-        } />
+          <Route
+            path="/create"
+            element={<CreateBlogForm onCreate={handleCreate} />}
+          />
+          <Route
+            path="*"
+            element={<h2>404 - Page not found</h2>}
+          />
+        </Routes>
+      </ErrorBoundary>
 
-      </Routes>
       <Footer />
     </Container>
   );
 };
-
-
-
-
 
 export default App;
