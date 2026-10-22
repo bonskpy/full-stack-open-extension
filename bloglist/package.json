@@ -1,0 +1,15 @@
+{
+  "name": "blog-list",
+  "version": "1.0.0",
+  "description": "bloglist is an app developed as a part of fullstack open course",
+  "license": "MIT",
+  "author": "bonski",
+  "scripts": {
+    "dev": "concurrently --names client,server --kill-others -c 'cyan,yellow' \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "build": "npm run build --prefix client",
+    "start": "NODE_ENV=production npm run start --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}

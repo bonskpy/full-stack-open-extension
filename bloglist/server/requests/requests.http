@@ -1,0 +1,81 @@
+POST  http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{
+"name": "Grzegorz Bonski",
+"username": "grbo",
+"password": "maslo"
+}
+
+###
+
+POST  http://localhost:3003/api/users HTTP/1.1
+content-type: application/json
+
+{
+"name": "Natalia Muzanowska",
+"username": "namu",
+"password": "piesek"
+}
+
+###
+
+POST http://localhost:3003/api/login HTTP/1.1
+content-type: application/json
+
+{
+"username": "jbonski",
+"password": "maslo"
+}
+
+###
+
+POST http://localhost:3003/api/login HTTP/1.1
+content-type: application/json
+
+{
+"username": "grbo",
+"password": "maslo"
+}
+
+###
+
+POST  http://localhost:3003/api/blogs HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MDQxMTQxM30.vneDrlvK3Uz52Sd8mSuCF06_JtBqzBECMrGlNtFAW5c
+
+{
+"title": "The End of Front-End Development",
+"author": "Joshua Comeau",
+"url": "https://www.joshwcomeau.com/blog/the-end-of-frontend-development/",
+"likes": 1,
+"user": "6ab57029a7469e2aaf040e21"
+}
+
+###
+
+GET  http://localhost:3003/api/users HTTP/1.1
+
+###
+
+GET http://localhost:3003/api/blogs HTTP/1.1
+
+###
+
+DELETE http://localhost:3003/api/blogs/6ab782b0a0827b317579d6dc HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MDQxODY3OSwiZXhwIjoxNzkwNDIyMjc5fQ.W8ThRkObdmjv1rxr7d-8lrUDecPf9ekXqiUFQHzjKlQ
+
+###
+
+PUT  http://localhost:3003/api/blogs/6ab2a1e0430ae870aacecd88 HTTP/1.1
+content-type: application/json
+
+{
+"title": "The End of Front-End Development",
+"author": "Jan Piczowski",
+"url": "https://www.joshwcomeau.com/blog/the-end-of-frontend-development/",
+"likes": 12
+}
+
+###
