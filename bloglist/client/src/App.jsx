@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-
 import { Route, Routes, useMatch, useNavigate } from "react-router-dom";
+
+import { Container } from "@mui/material";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+
+import { checkLocalStorage } from "./utils";
 
 import CreateBlogForm from "./components/CreateBlogForm";
 import LoginForm from "./components/LoginForm";
@@ -12,24 +15,19 @@ import Notification from "./components/Notification";
 import Blog from "./components/Blog";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import About from "./components/About";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-import { Container } from "@mui/material";
-
-const checkLocalStorage = () => {
-  const loggedUser = window.localStorage.getItem("loggedUser");
-  if (loggedUser) {
-    return JSON.parse(loggedUser);
-  }
-  return null;
-};
+import { useNotification } from "./stores";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(checkLocalStorage);
   const navigate = useNavigate();
   const match = useMatch("/blogs/:id");
+
+  const alert = useNotification((state) => state.set);
+  const clearAlert = useNotification((state) => state.clear);
 
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
 
@@ -56,7 +54,7 @@ const App = () => {
   }, [user]);
 
   const errorHandler = async (error) => {
-    setNotification({ content: error.response.data.message, type: "error" });
+    alert({ message: error.response.data.message, type: "error" });
   };
 
   const handleLogin = async ({ username, password }) => {
@@ -64,13 +62,14 @@ const App = () => {
       const credentials = { username, password };
       const loggedUser = await loginService.login(credentials);
       setUser(loggedUser);
-      setNotification({ content: "login successful", type: "success" });
+
+      alert({ message: "login successful", type: "success" });
       navigate("/");
     } catch (err) {
-      setNotification({ content: "login failed" });
+      alert({ message: "login failed", type: "error" });
       throw err;
     } finally {
-      setTimeout(() => setNotification(null), 3000);
+      setTimeout(() => clearAlert(), 3000);
     }
   };
 
@@ -78,12 +77,12 @@ const App = () => {
     try {
       const createdBlog = await blogService.createOne(blog);
       setBlogs((blogs) => blogs.concat(createdBlog));
-      setNotification({ content: "new blog is created", type: "success " });
+      alert({ message: "new blog is created", type: "success" });
     } catch (error) {
-      setNotification({ content: "New blog was not created", type: "error" });
+      alert({ message: "new blog was not created", type: "error" });
       throw error;
     } finally {
-      setTimeout(() => setNotification(null), 3000);
+      setTimeout(() => clearAlert(), 3000);
     }
   };
 
@@ -95,19 +94,19 @@ const App = () => {
           .filter((b) => b.id !== blog.id)
           .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
       );
-      setNotification({ content: "blog removed", type: "info" });
+      alert({ message: "blog removed", type: "info" });
       navigate("/");
     } catch (error) {
       errorHandler(error);
     } finally {
-      setTimeout(() => setNotification(null), 3000);
+      setTimeout(() => clearAlert(), 3000);
     }
   };
 
   const handleLogout = () => {
     setUser(null);
-    setNotification({ content: "logout successful", type: "success" });
-    setTimeout(() => setNotification(null), 3000);
+    alert({ message: "logout successful", type: "success" });
+    setTimeout(() => clearAlert(), 3000);
     navigate("/");
   };
 
@@ -123,20 +122,21 @@ const App = () => {
     } catch (error) {
       errorHandler(error);
       handleLogout();
-      setNotification({ content: "please login", type: "info" });
+      alert({ message: "please login", type: "info" });
     } finally {
-      setTimeout(() => setNotification(null), 3000);
+      setTimeout(() => clearAlert(), 3000);
     }
   };
 
   return (
     <Container>
       <Header user={user} handleLogout={handleLogout} />
-      <Notification message={notification} />
+      <Notification />
 
       <ErrorBoundary fallback={<h2>Something went wrong!</h2>}>
         <Routes>
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+          <Route path="/about" element={<About />} />
 
           <Route
             path="/"

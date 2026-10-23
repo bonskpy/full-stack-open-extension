@@ -1,19 +1,12 @@
 import Alert from "@mui/material/Alert";
+import { useNotification } from "../stores";
 
+const Notification = () => {
+  const message = useNotification((state) => state.alert.message);
+  const type = useNotification((state) => state.alert.type);
 
-const Notification = ({ message }) => {
   if (message) {
-
-    switch (message.type){
-    case "success":
-      return <Alert severity="success">{message.content}</Alert>;
-    case "info":
-      return <Alert severity="info">{message.content}</Alert>;
-    case "warning":
-      return <Alert severity="warning">{message.content}</Alert>;
-    default:
-      return <Alert severity="error">{message.content}</Alert>;
-    };
+    return <Alert severity={type}>{message}</Alert>;
   }
   return null;
 };
