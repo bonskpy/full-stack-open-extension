@@ -18,30 +18,35 @@ import Footer from "./components/Footer";
 import About from "./components/About";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-import { useNotification } from "./stores";
+import { useAlertShow, useBlogs, useBlogsActions } from "./stores";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogsOld, setBlogs] = useState([]);
   const [user, setUser] = useState(checkLocalStorage);
   const navigate = useNavigate();
   const match = useMatch("/blogs/:id");
 
-  const alert = useNotification((state) => state.set);
-  const clearAlert = useNotification((state) => state.clear);
+  const { notify } = useAlertShow();
+  const { initialize, create, remove } = useBlogsActions();
+  const blogs = useBlogs();
 
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) =>
-        setBlogs(
-          blogs.sort((a, b) =>
-            a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
-          ),
-        )
-      );
-  }, []);
+    initialize();
+  }, [initialize]);
+
+  // useEffect(() => {
+  //   blogService
+  //     .getAll()
+  //     .then((blogs) =>
+  //       setBlogs(
+  //         blogs.sort((a, b) =>
+  //           a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
+  //         ),
+  //       )
+  //     );
+  // }, []);
 
   useEffect(() => {
     if (user) {
@@ -54,7 +59,7 @@ const App = () => {
   }, [user]);
 
   const errorHandler = async (error) => {
-    alert({ message: error.response.data.message, type: "error" });
+    notify({ message: error.response.data.message, type: "error" });
   };
 
   const handleLogin = async ({ username, password }) => {
@@ -63,50 +68,48 @@ const App = () => {
       const loggedUser = await loginService.login(credentials);
       setUser(loggedUser);
 
-      alert({ message: "login successful", type: "success" });
+      notify({ message: "login successful", type: "success" });
       navigate("/");
     } catch (err) {
-      alert({ message: "login failed", type: "error" });
+      notify({ message: "login failed", type: "error" });
       throw err;
-    } finally {
-      setTimeout(() => clearAlert(), 3000);
     }
   };
 
   const handleCreate = async (blog) => {
-    try {
-      const createdBlog = await blogService.createOne(blog);
-      setBlogs((blogs) => blogs.concat(createdBlog));
-      alert({ message: "new blog is created", type: "success" });
-    } catch (error) {
-      alert({ message: "new blog was not created", type: "error" });
-      throw error;
-    } finally {
-      setTimeout(() => clearAlert(), 3000);
-    }
+    await create(blog);
+    notify({ message: "new blog is created", type: "success" });
+    // try {
+    //   const createdBlog = await blogService.createOne(blog);
+    //   setBlogs((blogs) => blogs.concat(createdBlog));
+    //   notify({ message: "new blog is created", type: "success" });
+    // } catch (error) {
+    //   notify({ message: "new blog was not created", type: "error" });
+    //   throw error;
+    // }
   };
 
   const handleRemove = async (blog) => {
-    try {
-      await blogService.removeOne(blog);
-      setBlogs((blogs) =>
-        blogs
-          .filter((b) => b.id !== blog.id)
-          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
-      );
-      alert({ message: "blog removed", type: "info" });
-      navigate("/");
-    } catch (error) {
-      errorHandler(error);
-    } finally {
-      setTimeout(() => clearAlert(), 3000);
-    }
+    await remove(blog);
+    notify({ message: "blog removed", type: "info" });
+    navigate("/");
+
+    // try {
+    //   await blogService.removeOne(blog);
+    //   setBlogs((blogs) =>
+    //     blogs
+    //       .filter((b) => b.id !== blog.id)
+    //       .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
+    //   );
+    //   notify({ message: "blog removed", type: "info" });
+    // } catch (error) {
+    //   errorHandler(error);
+    // }
   };
 
   const handleLogout = () => {
     setUser(null);
-    alert({ message: "logout successful", type: "success" });
-    setTimeout(() => clearAlert(), 3000);
+    notify({ message: "logout successful", type: "success" });
     navigate("/");
   };
 
@@ -122,9 +125,7 @@ const App = () => {
     } catch (error) {
       errorHandler(error);
       handleLogout();
-      alert({ message: "please login", type: "info" });
-    } finally {
-      setTimeout(() => clearAlert(), 3000);
+      notify({ message: "please login", type: "info" });
     }
   };
 
