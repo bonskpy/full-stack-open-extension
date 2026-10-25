@@ -1,5 +1,5 @@
 import Alert from "@mui/material/Alert";
-import { useAlertValue } from "../stores";
+import { useAlertValue } from "../stores/notificationStore";
 
 const Notification = () => {
   const { message, type } = useAlertValue();

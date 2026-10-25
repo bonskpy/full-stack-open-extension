@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Stack, Button, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-const CreateBlogForm = ({ onCreate }) => {
+import { useBlogsActions } from "../stores/blogStore";
+import { useAlertShow } from "../stores/notificationStore";
+
+const CreateBlogForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
   const navigate = useNavigate();
+  const { create } = useBlogsActions();
+  const { notify } = useAlertShow();
 
   const handleCreateNew = async (e) => {
     e.preventDefault();
@@ -17,7 +22,8 @@ const CreateBlogForm = ({ onCreate }) => {
       author,
       url,
     };
-    await onCreate(blogData);
+    await create(blogData);
+    notify({ message: "new blog is created", type: "success" });
     setTitle("");
     setAuthor("");
     setUrl("");
@@ -35,7 +41,8 @@ const CreateBlogForm = ({ onCreate }) => {
           sx={{
             justifyContent: "flex-start",
             alignItems: "flex-start",
-          }}>
+          }}
+        >
           <TextField
             id="title-textfield"
             label="title"
@@ -57,7 +64,9 @@ const CreateBlogForm = ({ onCreate }) => {
             size="small"
             onChange={(e) => setUrl(e.target.value)}
           />
-          <Button variant="contained" endIcon={<AddIcon />} type="submit">create</Button>
+          <Button variant="contained" endIcon={<AddIcon />} type="submit">
+            create
+          </Button>
         </Stack>
       </form>
     </>

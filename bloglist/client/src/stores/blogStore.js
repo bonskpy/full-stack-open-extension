@@ -1,48 +1,21 @@
 import { create } from "zustand";
-import blogService from "./services/blogs";
-
-let timeoutId;
-const useAlertStore = create((set) => ({
-  alert: {
-    message: "",
-    type: "",
-  },
-  actions: {
-    notify: (newAlert) => {
-      clearTimeout(timeoutId);
-      set({
-        alert: newAlert,
-      });
-      timeoutId = setTimeout(() => {
-        set({
-          alert: {
-            message: "",
-            type: "",
-          },
-        });
-      }, 3000);
-    },
-  },
-}));
-
-export const useAlertValue = () => useAlertStore((state) => state.alert);
-export const useAlertShow = () => useAlertStore((state) => state.actions);
+import blogService from "../services/blogs";
 
 const useBlogStore = create((set) => ({
   blogs: [],
   actions: {
+    create: async (blog) => {
+      const createdBlog = await blogService.createOne(blog);
+      set((state) => ({
+        blogs: state.blogs.concat(createdBlog),
+      }));
+    },
     initialize: async () => {
       const fetchedBlogs = await blogService.getAll();
       const blogs = fetchedBlogs.sort((a, b) =>
         a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
       );
       set({ blogs });
-    },
-    create: async (blog) => {
-      const createdBlog = await blogService.createOne(blog);
-      set((state) => ({
-        blogs: state.blogs.concat(createdBlog),
-      }));
     },
     remove: async (blog) => {
       await blogService.removeOne(blog);
@@ -53,11 +26,36 @@ const useBlogStore = create((set) => ({
         return { blogs };
       });
     },
+    like: async (blog) => {
+      const updatedBlog = await blogService.updateOne(blog);
+      set((state) => {
+        const blogs = state.blogs
+          .map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+          .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0));
+        return { blogs };
+      });
+    },
   },
 }));
 
 export const useBlogs = () => useBlogStore((state) => state.blogs);
 export const useBlogsActions = () => useBlogStore((state) => state.actions);
+
+// const handleLikes = async (blog) => {
+//   try {
+//     const updatedBlog = await blogService.updateOne(blog);
+
+//     setBlogs((blogs) =>
+//       blogs
+//         .map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+//         .sort((a, b) => (a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0))
+//     );
+//   } catch (error) {
+//     errorHandler(error);
+//     handleLogout();
+//     notify({ message: "please login", type: "info" });
+//   }
+// };
 
 // const handleCreate = async (blog) => {
 //   try {

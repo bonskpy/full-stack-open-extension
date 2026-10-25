@@ -9,7 +9,11 @@ import {
   TableRow,
 } from "@mui/material";
 
-const Blogs = ({ blogs }) => {
+import { useBlogs } from "../stores/blogStore";
+
+const Blogs = () => {
+  const blogs = useBlogs();
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -20,7 +24,7 @@ const Blogs = ({ blogs }) => {
               <TableCell>title</TableCell>
               <TableCell>author</TableCell>
               <TableCell>likes</TableCell>
-              <TableCell>username</TableCell>
+              <TableCell>user</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
