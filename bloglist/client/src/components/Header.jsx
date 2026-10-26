@@ -32,6 +32,7 @@ const Header = () => {
       <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
           <Button style={style} component={Link} to="/">blogs</Button>
+          <Button style={style} component={Link} to="/users">users</Button>
           <Button style={style} component={Link} to="/about">about</Button>
         </div>
         <div>
