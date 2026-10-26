@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppBar, Button, Toolbar } from "@mui/material";
+import { useUser, useUserActions } from "../stores/userStore";
+import { useAlertShow } from "../stores/notificationStore";
 
 const style = {
   backgroundColor: "transparent",
@@ -8,8 +10,19 @@ const style = {
   "&:hover": { bgcolor: "rgba(255,255,255,0.3)" },
 };
 
-const Header = ({ user, handleLogout }) => {
+const Header = () => {
+  const user = useUser();
+  const userActions = useUserActions();
+  const { notify } = useAlertShow();
+  const navigate = useNavigate();
+
   const displayName = user ? user.username : null;
+
+  const handleLogout = () => {
+    userActions.logout();
+    notify({ message: "logout successful", type: "success" });
+    navigate("/");
+  };
 
   return (
     <AppBar

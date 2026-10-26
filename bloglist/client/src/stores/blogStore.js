@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import blogService from "../services/blogs";
 
 const useBlogStore = create((set) => ({
@@ -38,7 +39,7 @@ const useBlogStore = create((set) => ({
   },
 }));
 
-export const useBlogs = () => useBlogStore((state) => state.blogs);
+export const useBlogs = () => useBlogStore(useShallow((state) => state.blogs));
 export const useBlogsActions = () => useBlogStore((state) => state.actions);
 
 // const handleLikes = async (blog) => {

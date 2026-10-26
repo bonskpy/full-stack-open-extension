@@ -19,7 +19,6 @@ const Blog = ({ blog, user }) => {
   const navigate = useNavigate();
 
   if (!blog) {
-    console.log("loading...");
     return;
   }
 
@@ -35,6 +34,7 @@ const Blog = ({ blog, user }) => {
   const handleRemove = async () => {
     const message = `Removing: "${blog.title}"`;
     if (!window.confirm(message)) return;
+
     await remove(blog);
     notify({ message: "blog removed", type: "info" });
     navigate("/");

@@ -1,17 +1,16 @@
 import axios from "axios";
+import { getToken } from "../stores/userStore";
 const baseUrl = "/api/blogs";
 
-let token = null;
-const setToken = (data) => {
-  token = data ? `Bearer ${data}` : null;
-};
-
-const setConfig = (token) => {
-  return {
-    headers: {
-      Authorization: token,
-    },
-  };
+const setConfig = () => {
+  const token = getToken();
+  return token
+    ? {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    : {};
 };
 
 const getAll = async () => {
@@ -20,19 +19,19 @@ const getAll = async () => {
 };
 
 const createOne = async (blogToBeCreated) => {
-  const response = await axios.post(baseUrl, blogToBeCreated, setConfig(token));
+  const response = await axios.post(baseUrl, blogToBeCreated, setConfig());
   return response.data;
 };
 
 const updateOne = async (blogToBeUpdated) => {
   const blogUrl = `${baseUrl}/${encodeURIComponent(blogToBeUpdated.id)}`;
-  const response = await axios.put(blogUrl, blogToBeUpdated, setConfig(token));
+  const response = await axios.put(blogUrl, blogToBeUpdated, setConfig());
   return response.data;
 };
 
 const removeOne = async (blogToBeRemoved) => {
   const blogUrl = `${baseUrl}/${encodeURIComponent(blogToBeRemoved.id)}`;
-  await axios.delete(blogUrl, setConfig(token));
+  await axios.delete(blogUrl, setConfig());
 };
 
-export default { getAll, createOne, updateOne, removeOne, setToken };
+export default { getAll, createOne, updateOne, removeOne };
