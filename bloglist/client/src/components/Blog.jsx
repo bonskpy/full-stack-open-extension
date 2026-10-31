@@ -12,14 +12,16 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useBlogsActions } from "../stores/blogStore";
 import { useAlertShow } from "../stores/notificationStore";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../stores/userStore";
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const { like, remove } = useBlogsActions();
   const { notify } = useAlertShow();
   const navigate = useNavigate();
+  const user = useUser();
 
   if (!blog) {
-    return;
+    return <div>Lading blog...</div>;
   }
 
   const handleLikes = async () => {

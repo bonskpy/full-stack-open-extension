@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 
-import { useAllUsers } from "../stores/userListStore";
+import { useAllUsers } from "../stores/usersStore";
 
 const Users = () => {
   const users = useAllUsers();

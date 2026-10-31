@@ -12,17 +12,23 @@ import About from "./components/About";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Error404 from "./components/Error404";
 import { useBlogs, useBlogsActions } from "./stores/blogStore";
-import { useUser } from "./stores/userStore";
-import { useAllUsersFetch } from "./stores/userListStore";
+import { useAllUsers, useAllUsersFetch } from "./stores/usersStore";
 import Users from "./components/Users";
+import User from "./components/User";
 
 const App = () => {
-  const match = useMatch("/blogs/:id");
+  const matchBlog = useMatch("/blogs/:id");
+  const matchUser = useMatch("/users/:id");
   const { initialize } = useBlogsActions();
   const blogs = useBlogs();
-  const user = useUser();
+  const users = useAllUsers();
   const fetchUserList = useAllUsersFetch();
-  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null;
+  const blog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
+    : null;
+  const user = matchUser
+    ? users.find((user) => user.id === matchUser.params.id)
+    : null;
 
   useEffect(() => {
     initialize();
@@ -47,6 +53,13 @@ const App = () => {
             element={
               <Blog
                 blog={blog}
+              />
+            }
+          />
+          <Route
+            path="/users/:id"
+            element={
+              <User
                 user={user}
               />
             }
