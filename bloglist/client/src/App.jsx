@@ -12,17 +12,17 @@ import About from "./components/About";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Error404 from "./components/Error404";
 import { useBlogs, useBlogsActions } from "./stores/blogStore";
-import { useAllUsers, useAllUsersFetch } from "./stores/usersStore";
+import { useUsers, useUsersActions } from "./stores/usersStore";
 import Users from "./components/Users";
 import User from "./components/User";
 
 const App = () => {
   const matchBlog = useMatch("/blogs/:id");
   const matchUser = useMatch("/users/:id");
-  const { initialize } = useBlogsActions();
+  const blogsActions = useBlogsActions();
   const blogs = useBlogs();
-  const users = useAllUsers();
-  const fetchUserList = useAllUsersFetch();
+  const users = useUsers();
+  const usersActions = useUsersActions();
   const blog = matchBlog
     ? blogs.find((blog) => blog.id === matchBlog.params.id)
     : null;
@@ -31,12 +31,12 @@ const App = () => {
     : null;
 
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    blogsActions.initialize();
+  }, [blogsActions]);
 
   useEffect(() => {
-    fetchUserList();
-  }, [fetchUserList]);
+    usersActions.fetch();
+  }, [usersActions]);
 
   return (
     <Container>

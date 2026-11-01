@@ -1,3 +1,4 @@
+
 POST  http://localhost:3003/api/users HTTP/1.1
 content-type: application/json
 
@@ -42,14 +43,17 @@ content-type: application/json
 
 POST  http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MDQxMTQxM30.vneDrlvK3Uz52Sd8mSuCF06_JtBqzBECMrGlNtFAW5c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJuYW1lIjoiSmFuIEJvxYRza2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MzQ3NTA2MCwiZXhwIjoxNzkzNDc4NjYwfQ.BtED6Sj-jBJm334Vebt5IBUs--grqVxj78p3vZJLgjQ
 
 {
 "title": "The End of Front-End Development",
 "author": "Joshua Comeau",
 "url": "https://www.joshwcomeau.com/blog/the-end-of-frontend-development/",
 "likes": 1,
-"user": "6ab57029a7469e2aaf040e21"
+"user": "6ab57029a7469e2aaf040e21",
+"comments": [
+  "comment"
+]
 }
 
 ###
@@ -62,9 +66,9 @@ GET http://localhost:3003/api/blogs HTTP/1.1
 
 ###
 
-DELETE http://localhost:3003/api/blogs/6ab782b0a0827b317579d6dc HTTP/1.1
+DELETE http://localhost:3003/api/blogs/6ae642112798ad2e79fc2629 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MDQxODY3OSwiZXhwIjoxNzkwNDIyMjc5fQ.W8ThRkObdmjv1rxr7d-8lrUDecPf9ekXqiUFQHzjKlQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impib25za2kiLCJuYW1lIjoiSmFuIEJvxYRza2kiLCJpZCI6IjZhYjU3MDI5YTc0NjllMmFhZjA0MGUyMSIsImlhdCI6MTc5MzQ3NTA2MCwiZXhwIjoxNzkzNDc4NjYwfQ.BtED6Sj-jBJm334Vebt5IBUs--grqVxj78p3vZJLgjQ
 
 ###
 

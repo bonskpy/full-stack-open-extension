@@ -1,8 +1,8 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
-import { useAllUsers } from "../stores/usersStore";
+import { useUsers } from "../stores/usersStore";
 
 const User = ({ user }) => {
-  const users = useAllUsers();
+  const users = useUsers();
 
   const userToRender = users.find((u) => user.id === u.id);
 

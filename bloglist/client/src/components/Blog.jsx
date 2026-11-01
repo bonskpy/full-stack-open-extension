@@ -4,6 +4,8 @@ import {
   CardActions,
   CardContent,
   Link,
+  List,
+  ListItem,
   Typography,
 } from "@mui/material";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -13,6 +15,8 @@ import { useBlogsActions } from "../stores/blogStore";
 import { useAlertShow } from "../stores/notificationStore";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../stores/userStore";
+
+import Comments from "../components/Comments";
 
 const Blog = ({ blog }) => {
   const { like, remove } = useBlogsActions();
@@ -96,6 +100,10 @@ const Blog = ({ blog }) => {
             </Button>
           )}
         </CardActions>
+        <Typography>
+          comments:
+        </Typography>
+        <Comments blog={blog} />
       </CardContent>
     </Card>
   );
