@@ -36,6 +36,14 @@ const useBlogStore = create((set) => ({
         return { blogs };
       });
     },
+    comment: async (blog) => {
+      const updatedBlog = await blogService.createComment(blog);
+      set((state) => {
+        const blogs = state.blogs
+          .map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog));
+        return { blogs };
+      });
+    },
   },
 }));
 

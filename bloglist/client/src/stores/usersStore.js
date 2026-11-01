@@ -12,4 +12,4 @@ const userListStore = create((set) => ({
 }));
 
 export const useUsers = () => userListStore((state) => state.allUsers);
-export const useUsersActions = () => userListStore((state) => state.fetch);
+export const useUsersActions = () => userListStore((state) => state.actions);

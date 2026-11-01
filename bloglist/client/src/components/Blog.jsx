@@ -1,11 +1,14 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Input,
   Link,
   List,
   ListItem,
+  TextField,
   Typography,
 } from "@mui/material";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
@@ -17,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../stores/userStore";
 
 import Comments from "../components/Comments";
+import CreateCommentForm from "../components/CreateCommentForm";
 
 const Blog = ({ blog }) => {
   const { like, remove } = useBlogsActions();
@@ -100,9 +104,7 @@ const Blog = ({ blog }) => {
             </Button>
           )}
         </CardActions>
-        <Typography>
-          comments:
-        </Typography>
+        <CreateCommentForm blog={blog} />
         <Comments blog={blog} />
       </CardContent>
     </Card>

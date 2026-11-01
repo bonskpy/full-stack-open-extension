@@ -65,6 +65,20 @@ blogsRouter.put("/:id", async (request, response) => {
   return updated ? response.json(updated) : response.status(404).end();
 });
 
+blogsRouter.put("/:id/comments", async (request, response) => {
+  const { title, author, url, likes, comments } = request.body;
+
+  jwt.verify(request.token, SECRET);
+
+  const updated = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { title, author, url, likes, comments },
+    { returnDocument: "after", runValidators: true },
+  ).populate("user", { username: 1 });
+
+  return updated ? response.json(updated) : response.status(404).end();
+});
+
 module.exports = blogsRouter;
 
 /*

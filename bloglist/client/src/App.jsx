@@ -65,10 +65,6 @@ const App = () => {
             }
           />
           <Route
-            path="/create"
-            element={<CreateBlogForm />}
-          />
-          <Route
             path="*"
             element={<Error404 />}
           />
