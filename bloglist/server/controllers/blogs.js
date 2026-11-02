@@ -1,11 +1,15 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const Comment = require("../models/comment");
 const { userExtractor } = require("../middleware");
 const jwt = require("jsonwebtoken");
 const { SECRET } = require("../utils/config");
 
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", { username: 1 });
+  const blogs = await Blog.find({})
+    .populate("user", { username: 1 })
+    .populate("comments", { content: 1 });
+
   response.json(blogs);
 });
 
@@ -17,7 +21,8 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
   });
 
   const savedBlog = await blog.save();
-  await savedBlog.populate("user", { username: 1 });
+  await savedBlog
+    .populate("user", { username: 1 });
 
   user.blogs = user.blogs.concat(blog._id);
   await user.save();
@@ -60,28 +65,32 @@ blogsRouter.put("/:id", async (request, response) => {
     request.params.id,
     { title, author, url, likes },
     { returnDocument: "after", runValidators: true },
-  ).populate("user", { username: 1 });
+  )
+    .populate("user", { username: 1 })
+    .populate("comments", { content: 1 });
 
   return updated ? response.json(updated) : response.status(404).end();
 });
 
-blogsRouter.put("/:id/comments", async (request, response) => {
-  const { title, author, url, likes, comments } = request.body;
+blogsRouter.post("/:id/comments", async (request, response) => {
+  const { content } = request.body;
 
-  jwt.verify(request.token, SECRET);
+  const comment = new Comment({
+    content,
+    blog: request.params.id,
+  });
+
+  const savedComment = await comment.save();
 
   const updated = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes, comments },
+    { $push: { comments: savedComment._id } },
     { returnDocument: "after", runValidators: true },
-  ).populate("user", { username: 1 });
+  )
+    .populate("user", { username: 1 })
+    .populate("comments", { content: 1 });
 
   return updated ? response.json(updated) : response.status(404).end();
 });
 
 module.exports = blogsRouter;
-
-/*
-POST /api/blogs (blogs.js:20-24): if a user is deleted after their token was issued, user is null and user._id throws.
-DELETE /api/blogs/:id (blogs.js:36-39): if the blog doesn't exist, blogToBeDeleted.user throws. Verify the token first, then return 404 when the blog is missing. When the user isn't the owner, return 403, not 401: the user is logged in but not allowed to delete it.
-*/

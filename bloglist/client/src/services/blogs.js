@@ -34,14 +34,10 @@ const removeOne = async (blog) => {
   await axios.delete(blogUrl, setConfig());
 };
 
-/**
- * Adds new anonymous comment to a blog.
- * @param {*} blog - blog object with a new comment.
- */
-const createComment = async (blog) => {
+const addComment = async (comment, blog) => {
   const commentUrl = `${baseUrl}/${encodeURIComponent(blog.id)}/comments`;
-  const response = await axios.put(commentUrl, blog, setConfig());
+  const response = await axios.post(commentUrl, { content: comment });
   return response.data;
 };
 
-export default { getAll, createComment, createOne, updateOne, removeOne };
+export default { getAll, addComment, createOne, updateOne, removeOne };

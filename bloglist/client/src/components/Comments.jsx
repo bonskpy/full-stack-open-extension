@@ -1,18 +1,15 @@
-import { Box, List, ListItem, Typography } from "@mui/material";
-
 const Comments = ({ blog }) => {
-  if (blog.comments.length > 0) {
+  if (blog.comments) {
     return (
-      <Box>
-        <Typography>
-          comments:
-          <List>
-            {blog.comments.map((comment) => <ListItem>{comment}</ListItem>)}
-          </List>
-        </Typography>
-      </Box>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>{comment.content}</li>
+        ))}
+      </ul>
     );
   }
+
+  return null;
 };
 
 export default Comments;

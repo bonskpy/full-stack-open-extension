@@ -1,34 +1,38 @@
-import { Button, Input, TextField } from "@mui/material";
-import { useState } from "react";
-import blogsService from "../services/blogs";
 import { useBlogsActions } from "../stores/blogStore";
 import { useAlertShow } from "../stores/notificationStore";
 
+import { create } from "zustand";
+
+const useCommentStore = create((set) => ({
+  comment: "",
+  set: (comment) => set({ comment }),
+}));
+
+const useComment = () => useCommentStore((state) => state.comment);
+const useSetComment = () => useCommentStore((state) => state.set);
+
 const CreateCommentForm = ({ blog }) => {
   // TODO: move state & logic to a store.
-  const [comment, setComment] = useState("");
+  const comment = useComment();
+  const setComment = useSetComment();
+
   const { notify } = useAlertShow();
   const blogActions = useBlogsActions();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const comments = blog.comments.concat(comment);
-    const updated = await blogsService.createComment({ ...blog, comments });
+    blogActions.addComment(comment, blog);
     notify({ message: "new comment added", type: "success" });
     setComment("");
-    blogActions.comment(updated);
   };
 
   return (
     <form name="comments-form" onSubmit={handleSubmit}>
-      <TextField
-        size="small"
-        multiline="false"
-        label="Comment"
-        value={comment}
-        onChange={(event) => setComment(event.target.value)}
-      />
-      <Button variant="outlined" type="input">Add</Button>
+      <label>
+        Comments
+        <input value={comment} onChange={(e) => setComment(e.target.value)} />
+      </label>
+      <button>Add</button>
     </form>
   );
 };

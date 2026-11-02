@@ -20,7 +20,8 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
   comments: [{
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Comment",
   }],
 });
 
