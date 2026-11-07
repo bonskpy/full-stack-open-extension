@@ -1,14 +1,9 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
   CardContent,
-  Input,
   Link,
-  List,
-  ListItem,
-  TextField,
   Typography,
 } from "@mui/material";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";

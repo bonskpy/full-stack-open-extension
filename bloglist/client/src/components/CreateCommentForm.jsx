@@ -1,18 +1,8 @@
 import { useBlogsActions } from "../stores/blogStore";
 import { useAlertShow } from "../stores/notificationStore";
-
-import { create } from "zustand";
-
-const useCommentStore = create((set) => ({
-  comment: "",
-  set: (comment) => set({ comment }),
-}));
-
-const useComment = () => useCommentStore((state) => state.comment);
-const useSetComment = () => useCommentStore((state) => state.set);
+import { useComment, useSetComment } from "../stores/commentStore";
 
 const CreateCommentForm = ({ blog }) => {
-  // TODO: move state & logic to a store.
   const comment = useComment();
   const setComment = useSetComment();
 

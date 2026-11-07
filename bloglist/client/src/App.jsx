@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Route, Routes, useMatch } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import CreateBlogForm from "./components/CreateBlogForm";
 import LoginForm from "./components/LoginForm";
 import Blogs from "./components/Blogs";
@@ -40,12 +40,14 @@ const App = () => {
 
   return (
     <Container>
+      <CssBaseline />
       <Header />
       <Notification />
       <ErrorBoundary fallback={<h2>Something went wrong!</h2>}>
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/create" element={<CreateBlogForm />} />
           <Route path="/about" element={<About />} />
           <Route path="/" element={<Blogs />} />
           <Route

@@ -19,9 +19,16 @@ const User = ({ user }) => {
         <Typography variant="body1">
           added blogs
         </Typography>
-        <ul>
+        {
+          /* <ul>
           {user.blogs.map((blog) => <li>{blog.title}</li>)}
-        </ul>
+        </ul> */
+        }
+        <List>
+          {user.blogs.map((blog) => (
+            <ListItem key={blog.id}>{blog.title}</ListItem>
+          ))}
+        </List>
       </Box>
     );
   }
