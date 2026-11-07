@@ -1,25 +1,18 @@
 import { create } from "zustand";
 import loginService from "../services/login";
-
-const checkLocalStorage = () => {
-  const loggedUser = window.localStorage.getItem("loggedUser");
-  if (loggedUser) {
-    return JSON.parse(loggedUser);
-  }
-  return null;
-};
+import { getUser, removeUser, saveUser } from "../services/persistentUser";
 
 const userStore = create((set) => ({
-  user: checkLocalStorage(),
+  user: getUser(),
   actions: {
-    login: async (credentials) => {
-      const user = await loginService.login(credentials);
-      set({ user });
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
-    },
+    // login: async (credentials) => {
+    //   const user = await loginService.login(credentials);
+    //   saveUser(user);
+    //   set({ user });
+    // },
     logout: () => {
+      removeUser(removeUser);
       set({ user: null });
-      window.localStorage.removeItem("loggedUser");
     },
   },
 }));
@@ -27,3 +20,11 @@ const userStore = create((set) => ({
 export const useUser = () => userStore((state) => state.user);
 export const useUserActions = () => userStore((state) => state.actions);
 export const getToken = () => userStore.getState().user?.token;
+
+export const useLogin = () => async (credentials) => {
+  console.log("useLogin running...");
+  const user = await loginService.login(credentials);
+  console.log(user);
+  saveUser(user);
+  userStore.setState({ user });
+};

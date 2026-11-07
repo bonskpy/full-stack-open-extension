@@ -27,16 +27,16 @@ const CreateCommentForm = ({ blog }) => {
         width: "fit-content",
       }}
     >
-      <label>Comments</label>
       <TextField
-        id="outlined-multiline-static"
+        label="comment"
+        type="text"
         multiline
         rows={4}
         value={comment}
         onChange={(e) => setComment(e.target.value)}
       />
       <Button type="submit" variant="contained">
-        Add
+        add comment
       </Button>
     </form>
   );

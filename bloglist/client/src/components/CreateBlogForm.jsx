@@ -44,6 +44,7 @@ const CreateBlogForm = () => {
           }}
         >
           <TextField
+            type="text"
             id="title-textfield"
             label="title"
             value={title}

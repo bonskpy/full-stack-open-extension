@@ -1,32 +1,29 @@
-// TODO
 import { useState } from "react";
 import { Button, Paper, Stack, TextField } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 
-import { useUserActions } from "../stores/userStore";
 import { useNavigate } from "react-router-dom";
 import { useAlertShow } from "../stores/notificationStore";
+import { useLogin } from "../stores/userStore";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const userActions = useUserActions();
+  // const userActions = useUserActions();
   const navigate = useNavigate();
   const { notify } = useAlertShow();
+  const login = useLogin();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    const credentials = { username, password };
     try {
-      await userActions.login(credentials);
+      await login({ username, password });
       setUsername("");
       setPassword("");
       notify({ message: "login successful", type: "success" });
       navigate("/");
-    } catch (err) {
+    } catch {
       notify({ message: "login failed", type: "error" });
-      throw err;
     }
   };
 
