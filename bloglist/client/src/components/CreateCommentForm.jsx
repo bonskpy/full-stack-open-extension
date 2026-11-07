@@ -1,6 +1,7 @@
 import { useBlogsActions } from "../stores/blogStore";
 import { useAlertShow } from "../stores/notificationStore";
 import { useComment, useSetComment } from "../stores/commentStore";
+import { Button, TextField } from "@mui/material";
 
 const CreateCommentForm = ({ blog }) => {
   const comment = useComment();
@@ -17,12 +18,26 @@ const CreateCommentForm = ({ blog }) => {
   };
 
   return (
-    <form name="comments-form" onSubmit={handleSubmit}>
-      <label>
-        Comments
-        <input value={comment} onChange={(e) => setComment(e.target.value)} />
-      </label>
-      <button>Add</button>
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        width: "fit-content",
+      }}
+    >
+      <label>Comments</label>
+      <TextField
+        id="outlined-multiline-static"
+        multiline
+        rows={4}
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
+      <Button type="submit" variant="contained">
+        Add
+      </Button>
     </form>
   );
 };

@@ -1,11 +1,18 @@
+import { Divider, List, ListItem, ListItemText } from "@mui/material";
+
 const Comments = ({ blog }) => {
   if (blog.comments) {
     return (
-      <ul>
+      <List>
         {blog.comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
+          <div>
+            <ListItem>
+              <ListItemText key={comment.id} primary={comment.content} />
+            </ListItem>
+            <Divider variant="middle" component="li" />
+          </div>
         ))}
-      </ul>
+      </List>
     );
   }
 
