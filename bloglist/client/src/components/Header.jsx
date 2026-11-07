@@ -24,8 +24,6 @@ const Header = () => {
   const navigate = useNavigate();
   const logout = useLogout();
 
-  const displayName = user ? user.username : null;
-
   const handleLogout = () => {
     logout();
     notify({ message: "logout successful", type: "success" });

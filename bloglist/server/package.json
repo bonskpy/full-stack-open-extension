@@ -7,12 +7,12 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing node --test --test-concurrency=1",
-    "test:api": "NODE_ENV=testing node --test ./tests/api/**/*.test.* --test-concurrency=1",
-    "test:only": "NODE_ENV=testing node --test --test-only --test-concurrency=1",
+    "test": "NODE_ENV=test node --test --test-concurrency=1",
+    "test:api": "NODE_ENV=test node --test ./tests/api/**/*.test.* --test-concurrency=1",
+    "test:only": "NODE_ENV=test node --test --test-only --test-concurrency=1",
     "dev": "NODE_ENV=development node --watch index.js",
     "lint": "eslint . --fix",
-    "start:test": "NODE_ENV=testing node --watch index.js",
+    "start:test": "NODE_ENV=test node --watch index.js",
     "start": "node --watch index.js"
   },
   "dependencies": {
