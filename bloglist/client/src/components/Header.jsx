@@ -78,7 +78,7 @@ const Header = () => {
           )}
           {user && (
             <Button style={styleLogin} onClick={handleLogout}>
-              logout ({displayName})
+              logout
             </Button>
           )}
         </div>
