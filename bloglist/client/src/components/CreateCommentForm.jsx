@@ -12,9 +12,13 @@ const CreateCommentForm = ({ blog }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    blogActions.addComment(comment, blog);
-    notify({ message: "new comment added", type: "success" });
-    setComment("");
+    try {
+      await blogActions.addComment(comment, blog);
+      notify({ message: "new comment added", type: "success" });
+      setComment("");
+    } catch {
+      notify({ message: "faield to add new comment", type: "error" });
+    }
   };
 
   return (

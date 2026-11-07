@@ -4,6 +4,7 @@ import { useUsers } from "../stores/usersStore";
 const User = ({ user }) => {
   const users = useUsers();
 
+  // TODO: add a flag to account for users still loading.
   const userToRender = users.find((u) => user.id === u.id);
 
   if (!userToRender) {

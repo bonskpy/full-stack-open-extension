@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { AppBar, Button, Toolbar, Typography } from "@mui/material";
-import { useUser, useUserActions } from "../stores/userStore";
+import { useLogout, useUser } from "../stores/userStore";
 import { useAlertShow } from "../stores/notificationStore";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 
@@ -12,7 +12,6 @@ const style = {
 };
 
 const styleLogin = {
-  // backgroundColor: "transparent",
   border: "solid 1px white",
   color: "white",
   marginRight: "5px",
@@ -21,14 +20,14 @@ const styleLogin = {
 
 const Header = () => {
   const user = useUser();
-  const userActions = useUserActions();
   const { notify } = useAlertShow();
   const navigate = useNavigate();
+  const logout = useLogout();
 
   const displayName = user ? user.username : null;
 
   const handleLogout = () => {
-    userActions.logout();
+    logout();
     notify({ message: "logout successful", type: "success" });
     navigate("/");
   };
